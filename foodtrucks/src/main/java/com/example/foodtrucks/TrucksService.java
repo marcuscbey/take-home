@@ -4,20 +4,19 @@ import com.example.foodtrucks.model.FoodTruck;
 import com.fasterxml.jackson.databind.MappingIterator;
 import com.fasterxml.jackson.dataformat.csv.CsvMapper;
 import com.fasterxml.jackson.dataformat.csv.CsvSchema;
+import org.springframework.stereotype.Service;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
+@Service
 public class TrucksService {
     // key: locationId, value: truck info
     Map<String, FoodTruck> locationMap;
-    // key: block, value: list of locationIds
-    Map<String, List<String>> blockMap;
+    // key: block, value: Set of locationIds
+    Map<String, Set<String>> blockMap;
 
     public TrucksService() throws IOException {
         this.locationMap = new HashMap<>();
@@ -26,25 +25,25 @@ public class TrucksService {
     }
 
     public void addTruck(FoodTruck truck) {
-        //TODO: Validate truck object
 
         // Add each truck to location Map
         locationMap.put(truck.getLocationId(), truck);
         if(!blockMap.containsKey(truck.getBlock())) {
-            blockMap.put(truck.getBlock(), new ArrayList<>());
+            blockMap.put(truck.getBlock(), new HashSet<>());
         }
         // add each truck to block list
         blockMap.get(truck.getBlock()).add(truck.getLocationId());
     }
 
     public FoodTruck getTruckById(String locationId) {
-        return locationMap.get(locationId);
+        return locationMap.getOrDefault(locationId, null);
     }
 
     public List<FoodTruck> getTrucksByBlock(String block) {
-        List<String> blockInfo = blockMap.get(block);
+        Set<String> blockInfo = blockMap.get(block);
         List<FoodTruck> foodTrucks = blockInfo.stream()
-                .map(id -> locationMap.get(id)) //TODO: what if not in locationMap
+                .map(id -> locationMap.getOrDefault(id, null))
+                .filter(Objects::nonNull) //remove entries that aren't present in LocationMap
                 .collect(Collectors.toList());
 
         return foodTrucks;
