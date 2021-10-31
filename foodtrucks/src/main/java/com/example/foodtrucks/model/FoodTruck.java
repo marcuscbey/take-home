@@ -4,10 +4,10 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import lombok.Data;
 
 @Data
-@JsonPropertyOrder({     "locationId", "applicant", "facilityType", "cnn",
-        "locationDescription", "Address", "blockLot", "block",
+@JsonPropertyOrder({"locationId", "applicant", "facilityType", "cnn",
+        "locationDescription", "address", "blockLot", "block",
         "lot", "permit", "status", "foodItems", "x", "y",
-        "Latitude", "Longitude", "schedule", "daysHours",
+        "latitude", "longitude", "schedule", "daysHours",
         "noiSent", "approved", "received", "priorPermit",
         "expirationDate", "location" })
 public class FoodTruck {
@@ -16,7 +16,7 @@ public class FoodTruck {
     String facilityType;
     String cnn;
     String locationDescription;
-    String Address;
+    String address;
     String blockLot;
     String block;
     String lot;
@@ -25,8 +25,8 @@ public class FoodTruck {
     String foodItems;
     String x;
     String y;
-    String Latitude;
-    String Longitude;
+    String latitude;
+    String longitude;
     String schedule;
     String daysHours;
     String noiSent;

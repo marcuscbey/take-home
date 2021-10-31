@@ -19,6 +19,7 @@ public class TrucksService {
     Map<String, Set<String>> blockMap;
 
     public TrucksService() throws IOException {
+        // Limited by the memory size of the server
         this.locationMap = new HashMap<>();
         this.blockMap = new HashMap<>();
         loadMaps();
@@ -40,13 +41,14 @@ public class TrucksService {
     }
 
     public List<FoodTruck> getTrucksByBlock(String block) {
-        Set<String> blockInfo = blockMap.get(block);
+        Set<String> blockInfo = blockMap.getOrDefault(block, new HashSet<>());
         List<FoodTruck> foodTrucks = blockInfo.stream()
                 .map(id -> locationMap.getOrDefault(id, null))
                 .filter(Objects::nonNull) //remove entries that aren't present in LocationMap
                 .collect(Collectors.toList());
 
-        return foodTrucks;
+        // If there are no trucks returned then send null
+        return foodTrucks.size() > 0 ? foodTrucks : null;
     }
 
     public void loadMaps() throws IOException {
