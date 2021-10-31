@@ -1,5 +1,5 @@
 # Food Truck Service
-
+This is a basic service designed to serve food truck related info.
 ##Basic Usage
 To run the application you must first have maven installed and run the following command:
 
